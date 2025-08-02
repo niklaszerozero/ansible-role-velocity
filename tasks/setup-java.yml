@@ -1,5 +1,0 @@
-- name: Install Java
-  ansible.builtin.package:
-    name: "{{ velocity_java_packages }}"
-    state: present
-  become: true

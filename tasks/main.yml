@@ -1,18 +1,4 @@
 ---
-- name: Include version-specific variables.
-  include_vars: "{{ ansible_distribution | lower }}.yml"
-
-- name: Define velocity_java_packages.
-  ansible.builtin.set_fact:
-    velocity_java_packages: "{{ __velocity_java_packages | list }}"
-  when: velocity_java_packages is not defined
-
-- name: Install prerequisites
-  ansible.builtin.package:
-    name: tmux
-    state: present
-  become: true
-
 - name: Create Velocity group
   ansible.builtin.group:
     name: "{{ velocity_group }}"
@@ -34,11 +20,8 @@
     group: "{{ velocity_group }}"
     state: directory
 
-- name: Install Java
-  ansible.builtin.include_tasks: "setup-java.yml"
-
 - name: Install Velocity
   ansible.builtin.include_tasks: setup-velocity.yml
 
-- name: Install service (Debian/Ubuntu)
+- name: Install Service
   ansible.builtin.include_tasks: "setup-service-{{ ansible_os_family | lower }}.yml"

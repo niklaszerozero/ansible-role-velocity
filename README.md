@@ -8,7 +8,8 @@ After the role is run, a `velocity` service will be available on the server. You
 
 ## Requirements
 
-None.
+Java 17 or higher must be installed.
+You can install it using the [geerlingguy.java](https://github.com/geerlingguy/ansible-role-java) role or your own method.
 
 ## Role Variables
 
@@ -342,6 +343,7 @@ None.
   vars_files:
     - vars/main.yml
   roles:
+    - role: geerlingguy.java
     - role: niklaszerozero.velocity
 ```
 
