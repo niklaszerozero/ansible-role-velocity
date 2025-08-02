@@ -1,11 +1,17 @@
 ---
-###
-# Setup prerequisites
-###
+- name: Include version-specific variables.
+  include_vars: "{{ ansible_distribution | lower }}.yml"
 
-- name: Install prerequisites (Debian/Ubuntu)
-  ansible.builtin.include_tasks: install-prerequisites-debian.yml
-  when: ansible_os_family == "Debian"
+- name: Define velocity_java_packages.
+  ansible.builtin.set_fact:
+    velocity_java_packages: "{{ __velocity_java_packages | list }}"
+  when: velocity_java_packages is not defined
+
+- name: Install prerequisites
+  ansible.builtin.package:
+    name: tmux
+    state: present
+  become: true
 
 - name: Create Velocity group
   ansible.builtin.group:
@@ -28,93 +34,11 @@
     group: "{{ velocity_group }}"
     state: directory
 
-###
-# Install Java
-###
+- name: Install Java
+  ansible.builtin.include_tasks: "setup-java.yml"
 
-- name: Install Java (Debian/Ubuntu)
-  ansible.builtin.include_tasks: install-java-debian.yml
-  when: ansible_os_family == "Debian"
-
-###
-# Install Velocity
-###
-
-- name: List Velocity builds
-  ansible.builtin.uri:
-    url: https://fill.papermc.io/v3/projects/velocity/versions/{{ velocity_version }}/builds/latest
-    return_content: true
-  register: velocity_api_build
-
-- name: Download Velocity
-  ansible.builtin.get_url:
-    url: "{{ velocity_api_build.json.downloads['server:default'].url }}"
-    checksum: sha256:{{ velocity_checksum | default(velocity_api_build.json.downloads['server:default'].checksums.sha256) }}
-    dest: "{{ velocity_path }}/velocity.jar"
-    owner: "{{ velocity_user }}"
-    group: "{{ velocity_group }}"
-    mode: u=rw,go=r
-
-- name: Remove forwarding.secret
-  ansible.builtin.file:
-    path: "{{ velocity_path }}/forwarding.secret"
-    state: absent
-  when: velocity_forwarding_secret | default('') | length == 0
-
-- name: Create forwarding.secret
-  ansible.builtin.copy:
-    content: "{{ velocity_forwarding_secret }}"
-    dest: "{{ velocity_path }}/forwarding.secret"
-    owner: "{{ velocity_user }}"
-    group: "{{ velocity_group }}"
-    mode: u=rw,go=r
-  when: velocity_forwarding_secret | default('') | length > 0
-
-- name: Sync plugins
-  block:
-    - name: Ensure target plugin directory exists
-      ansible.builtin.file:
-        path: "{{ velocity_path }}/plugins"
-        state: directory
-        owner: "{{ velocity_user }}"
-        group: "{{ velocity_group }}"
-        mode: "u=rwx,go=rx"
-
-    - name: Remove all existing .jar files in plugin directory
-      ansible.builtin.find:
-        paths: "{{ velocity_path }}/plugins"
-        patterns: "*.jar"
-      register: old_plugins
-
-    - name: Delete found .jar files
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        state: absent
-      loop: "{{ old_plugins.files }}"
-      when: old_plugins.matched > 0
-
-    - name: Copy all plugin files
-      ansible.builtin.copy:
-        src: "{{ velocity_plugins_src }}"
-        dest: "{{ velocity_path }}/plugins/"
-        owner: "{{ velocity_user }}"
-        group: "{{ velocity_group }}"
-        mode: u=rw,go=r
-
-  when:
-    - velocity_plugins_src is defined
-    - velocity_plugins_src | length > 0
-    - velocity_plugins_src is directory
-
-- name: Copy config
-  ansible.builtin.template:
-    src: "{{ velocity_config }}"
-    dest: "{{ velocity_path }}/velocity.toml"
-    owner: "{{ velocity_user }}"
-    group: "{{ velocity_group }}"
-    mode: u=rw,go=r
-  notify: restart velocity
+- name: Install Velocity
+  ansible.builtin.include_tasks: setup-velocity.yml
 
 - name: Install service (Debian/Ubuntu)
-  ansible.builtin.include_tasks: install-service-debian.yml
-  when: ansible_os_family == "Debian"
+  ansible.builtin.include_tasks: "setup-service-{{ ansible_os_family | lower }}.yml"

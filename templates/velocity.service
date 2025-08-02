@@ -11,11 +11,11 @@ Group={{ velocity_group }}
 Restart=always
 RestartSec=5s
 
-ExecStart=/usr/bin/screen -DmS velocity /usr/bin/java {{ velocity_java_arguments }} -jar {{ velocity_path }}/velocity.jar
+ExecStart=/usr/bin/tmux new-session -d -s velocity "/usr/bin/java {{ velocity_java_arguments }} -jar {{ velocity_path }}/velocity.jar"
 
-ExecStop=/usr/bin/screen -S velocity -X stuff \"stop^M\"
+ExecStop=/usr/bin/tmux send-keys -t velocity "stop" C-m
 ExecStopPost=/bin/sleep 5
-ExecStopPost=/usr/bin/screen -S velocity -X quit
+ExecStopPost=/usr/bin/tmux kill-session -t velocity
 
 [Install]
 WantedBy=multi-user.target

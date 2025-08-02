@@ -1,8 +1,0 @@
----
-- name: Install prerequisites
-  ansible.builtin.apt:
-    name:
-      - screen
-    state: present
-    update_cache: true
-  become: true

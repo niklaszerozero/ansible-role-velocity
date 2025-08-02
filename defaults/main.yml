@@ -6,7 +6,6 @@ velocity_group: velocity
 velocity_user: velocity
 
 # Java
-velocity_java_version: openjdk-21-jre
 velocity_java_maximum_memory: 2048M
 velocity_java_initial_memory: 2048M
 velocity_java_arguments: "-Xms{{ velocity_java_initial_memory }} -Xmx{{ velocity_java_maximum_memory }} -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:MaxInlineLevel=15"
