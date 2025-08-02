@@ -42,12 +42,6 @@ The system user under which Velocity will run.
 ### Java
 
 ```yaml
-velocity_java_version: openjdk-21-jre
-```
-
-The Java runtime package to install for running Velocity.
-
-```yaml
 velocity_java_maximum_memory: 2048M
 ```
 
