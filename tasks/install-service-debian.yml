@@ -1,0 +1,13 @@
+---
+- name: Add systemd service
+  ansible.builtin.template:
+    src: velocity.service
+    dest: /lib/systemd/system/velocity.service
+    mode: "0644"
+  become: true
+  notify: restart velocity
+
+- name: Force systemd to reread configs
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+  notify: restart velocity

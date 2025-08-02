@@ -1,0 +1,6 @@
+- name: Install Java from apt
+  ansible.builtin.apt:
+    name: "{{ velocity_java_version }}"
+    state: present
+    update_cache: true
+  become: true

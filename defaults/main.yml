@@ -1,0 +1,75 @@
+---
+# General
+velocity_version: 3.4.0-SNAPSHOT
+velocity_path: /opt/velocity
+velocity_group: velocity
+velocity_user: velocity
+
+# Java
+velocity_java_version: openjdk-21-jre
+velocity_java_maximum_memory: 2048M
+velocity_java_initial_memory: 2048M
+velocity_java_arguments: "-Xms{{ velocity_java_initial_memory }} -Xmx{{ velocity_java_maximum_memory }} -XX:+AlwaysPreTouch -XX:+ParallelRefProcEnabled -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:MaxInlineLevel=15"
+
+# Velocity: General Settings
+velocity_config: velocity.toml
+velocity_bind_addr: 0.0.0.0:25565
+velocity_motd: <#09add3>A Velocity Server
+velocity_show_max_players: 500
+velocity_online_mode: true
+velocity_force_key_authentication: true
+velocity_prevent_client_proxy_connections: false
+velocity_player_info_forwarding_mode: "NONE"
+velocity_forwarding_secret: ""
+velocity_announce_forge: false
+velocity_kick_existing_players: false
+velocity_ping_passthrough: "DISABLED"
+velocity_sample_players_in_ping: false
+velocity_enable_player_address_logging: true
+velocity_servers:
+  - name: lobby
+    addr: 127.0.0.1:30066
+  - name: factions
+    addr: 127.0.0.1:30067
+  - name: minigames
+    addr: 127.0.0.1:30068
+velocity_try:
+  - lobby
+velocity_forced_hosts:
+  lobby.example.com:
+    - lobby
+  factions.example.com:
+    - factions
+  minigames.example.com:
+    - minigames
+
+# Velocity: Advanced Settings
+velocity_advanced_compression_threshold: 256
+velocity_advanced_compression_level: -1
+velocity_advanced_login_ratelimit: 3000
+velocity_advanced_connection_timeout: 5000
+velocity_advanced_read_timeout: 30000
+velocity_advanced_haproxy_protocol: false
+velocity_advanced_tcp_fast_open: false
+velocity_advanced_bungee_plugin_message_channel: true
+velocity_advanced_show_ping_requests: false
+velocity_advanced_failover_on_unexpected_server_disconnect: true
+velocity_advanced_announce_proxy_commands: true
+velocity_advanced_log_command_executions: false
+velocity_advanced_log_player_connections: true
+velocity_advanced_accepts_transfers: false
+velocity_advanced_enable_reuse_port: false
+velocity_advanced_command_rate_limit: 50
+velocity_advanced_forward_commands_if_rate_limited: true
+velocity_advanced_kick_after_rate_limited_commands: 0
+velocity_advanced_tab_complete_rate_limit: 10
+velocity_advanced_kick_after_rate_limited_tab_completes: 0
+
+# Velocity: Query Settings
+velocity_query_enabled: false
+velocity_query_port: 25565
+velocity_query_map: "Velocity"
+velocity_query_show_plugins: false
+
+# Velocity: Plugins
+velocity_plugins_src: plugins/

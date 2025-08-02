@@ -1,0 +1,21 @@
+[Unit]
+Description=Velocity Server
+After=network.target
+
+[Service]
+WorkingDirectory={{ velocity_path }}
+
+User={{ velocity_user }}
+Group={{ velocity_group }}
+
+Restart=always
+RestartSec=5s
+
+ExecStart=/usr/bin/screen -DmS velocity /usr/bin/java {{ velocity_java_arguments }} -jar {{ velocity_path }}/velocity.jar
+
+ExecStop=/usr/bin/screen -S velocity -X stuff \"stop^M\"
+ExecStopPost=/bin/sleep 5
+ExecStopPost=/usr/bin/screen -S velocity -X quit
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+---
+- name: restart velocity
+  ansible.builtin.service:
+    name: velocity
+    state: restarted
+    enabled: true
+  become: true
