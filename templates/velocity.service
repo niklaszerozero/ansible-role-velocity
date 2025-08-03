@@ -8,14 +8,15 @@ WorkingDirectory={{ velocity_path }}
 User={{ velocity_user }}
 Group={{ velocity_group }}
 
+ExecStart=/usr/bin/java {{ velocity_java_arguments }} -jar {{ velocity_path }}/velocity.jar
+ExecStop=/bin/sh -c 'echo "shutdown" | socat - "FD:/proc/$MAINPID/fd/0"'
+
 Restart=always
 RestartSec=5s
 
-ExecStart=/usr/bin/tmux new-session -d -s velocity "/usr/bin/java {{ velocity_java_arguments }} -jar {{ velocity_path }}/velocity.jar"
-
-ExecStop=/usr/bin/tmux send-keys -t velocity "stop" C-m
-ExecStopPost=/bin/sleep 5
-ExecStopPost=/usr/bin/tmux kill-session -t velocity
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
