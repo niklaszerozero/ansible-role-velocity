@@ -9,7 +9,7 @@
     comment: Velocity user
     name: "{{ velocity_user }}"
     group: "{{ velocity_group }}"
-    shell: /sbin/nologin
+    shell: /bin/bash
     create_home: false
     state: present
 
