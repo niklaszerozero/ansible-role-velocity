@@ -19,7 +19,7 @@ velocity_online_mode: true
 velocity_force_key_authentication: true
 velocity_prevent_client_proxy_connections: false
 velocity_player_info_forwarding_mode: "NONE"
-velocity_forwarding_secret: ""
+velocity_forwarding_secret: change-this
 velocity_announce_forge: false
 velocity_kick_existing_players: false
 velocity_ping_passthrough: "DISABLED"

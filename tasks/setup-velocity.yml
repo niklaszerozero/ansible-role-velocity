@@ -25,12 +25,6 @@
     group: "{{ velocity_group }}"
     mode: u=rw,go=r
 
-- name: Remove forwarding.secret
-  ansible.builtin.file:
-    path: "{{ velocity_path }}/forwarding.secret"
-    state: absent
-  when: velocity_forwarding_secret | default('') | length == 0
-
 - name: Create forwarding.secret
   ansible.builtin.copy:
     content: "{{ velocity_forwarding_secret }}"
@@ -38,7 +32,6 @@
     owner: "{{ velocity_user }}"
     group: "{{ velocity_group }}"
     mode: u=rw,go=r
-  when: velocity_forwarding_secret | default('') | length > 0
 
 - name: Sync plugins
   block:

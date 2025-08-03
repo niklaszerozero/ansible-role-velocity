@@ -3,7 +3,7 @@
   ansible.builtin.template:
     src: velocity.service
     dest: /lib/systemd/system/velocity.service
-    mode: "0644"
+    mode: u=rw,go=r
   become: true
   notify: restart velocity
 
